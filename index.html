@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HECKER.INT - Komunitas Cyber Security Indonesia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ============================================================
+   NETWORK STATUS SECTION — sesuai style HECKER.INT
+   ============================================================ */
+
+    /* ── Wrapper ── */
+    #network-status {
+      position: relative;
+      background: var(--bg, #0a0f0a);
+      padding: 100px 40px;
+      overflow: hidden;
+    }
+
+    /* scanline overlay */
+    #network-status::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 255, 65, 0.012) 2px,
+          rgba(0, 255, 65, 0.012) 4px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* grid BG */
+    #network-status::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 255, 65, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 65, 0.03) 1px, transparent 1px);
+      background-size: 44px 44px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* glow orbs */
+    .ns-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(110px);
+      pointer-events: none;
+      z-index: 0;
+      animation: ns-orb-float 9s ease-in-out infinite;
+    }
+
+    .ns-orb-1 {
+      width: 480px;
+      height: 480px;
+      background: var(--accent, #00ff41);
+      opacity: .07;
+      top: -160px;
+      left: -120px;
+    }
+
+    .ns-orb-2 {
+      width: 360px;
+      height: 360px;
+      background: #00e5ff;
+      opacity: .06;
+      bottom: -100px;
+      right: -80px;
+      animation-direction: reverse;
+      animation-duration: 11s;
+    }
+
+    @keyframes ns-orb-float {
+
+      0%,
+      100% {
+        transform: translate(0, 0)
+      }
+
+      50% {
+        transform: translate(18px, -18px)
+      }
+    }
+
+    .ns-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ── */
+    .ns-live-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent, #00ff41);
+      margin-bottom: 14px;
+    }
+
+    .ns-live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent, #00ff41);
+      box-shadow: 0 0 8px var(--accent, #00ff41), 0 0 18px var(--accent, #00ff41);
+      animation: ns-blink 1.6s ease-in-out infinite;
+    }
+
+    @keyframes ns-blink {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1)
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(.7)
+      }
+    }
+
+    .ns-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: var(--text, #e0ffe8);
+      line-height: 1;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
+    }
+
+    .ns-title .accent {
+      color: var(--accent, #00ff41);
+      text-shadow: 0 0 28px rgba(0, 255, 65, .55);
+    }
+
+    .ns-subtitle {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      color: rgba(0, 255, 65, .45);
+      margin-bottom: 50px;
+      letter-spacing: 1px;
+    }
+
+    .ns-subtitle em {
+      color: #00e5ff;
+      font-style: normal;
+    }
+
+    /* ── Uptime Bar ── */
+    .ns-uptime-bar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 22px;
+      background: rgba(0, 255, 65, .04);
+      border: 1px solid rgba(0, 255, 65, .18);
+      border-left: 3px solid var(--accent, #00ff41);
+      border-radius: 4px;
+      margin-bottom: 40px;
+    }
+
+    .ns-uptime-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(0, 255, 65, .45);
+      white-space: nowrap;
+    }
+
+    .ns-uptime-track {
+      flex: 1;
+      height: 5px;
+      background: rgba(0, 255, 65, .1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .ns-uptime-fill {
+      height: 100%;
+      width: 99.97%;
+      background: linear-gradient(90deg, #00ff41, #00e5ff);
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(0, 255, 65, .5);
+      animation: ns-uptime-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes ns-uptime-pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 10px rgba(0, 255, 65, .5)
+      }
+
+      50% {
+        box-shadow: 0 0 20px rgba(0, 229, 255, .8)
+      }
+    }
+
+    .ns-uptime-val {
+      font-family: 'Orbitron', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent, #00ff41);
+      white-space: nowrap;
+    }
+
+    /* ── Grid layouts ── */
+    .ns-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .ns-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .ns-grid-2b {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    /* ── Base Card ── */
+    .ns-card {
+      position: relative;
+      background: var(--card-bg, #0d1f0d);
+      border: 1px solid rgba(0, 255, 65, .18);
+      border-radius: 6px;
+      padding: 26px;
+      overflow: hidden;
+      transition: border-color .3s, transform .3s, background .3s;
+      cursor: default;
+    }
+
+    .ns-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 255, 65, .03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .ns-card:hover {
+      border-color: rgba(0, 255, 65, .5);
+      background: rgba(0, 255, 65, .06);
+      transform: translateY(-2px);
+    }
+
+    .ns-card-glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent, #00ff41), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+
+    .ns-card:hover .ns-card-glow {
+      opacity: 1;
+    }
+
+    /* ── Card content atoms ── */
+    .ns-clabel {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(0, 255, 65, .4);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ns-clabel::before {
+      content: '//';
+      color: rgba(0, 255, 65, .18);
+    }
+
+    .ns-cval {
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 1.9rem;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .ns-cval.sm {
+      font-size: 1.4rem;
+    }
+
+    .ns-cval.g {
+      color: var(--accent, #00ff41);
+      text-shadow: 0 0 18px rgba(0, 255, 65, .4);
+    }
+
+    .ns-cval.c {
+      color: #00e5ff;
+      text-shadow: 0 0 18px rgba(0, 229, 255, .4);
+    }
+
+    .ns-cval.a {
+      color: #ffa500;
+      text-shadow: 0 0 18px rgba(255, 165, 0, .4);
+    }
+
+    .ns-cval.r {
+      color: #ff073a;
+      text-shadow: 0 0 18px rgba(255, 7, 58, .4);
+    }
+
+    .ns-cval.w {
+      color: var(--text, #e0ffe8);
+    }
+
+    .ns-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 2px;
+      margin-top: 8px;
+    }
+
+    .ns-badge.ok {
+      background: rgba(0, 255, 65, .1);
+      color: var(--accent, #00ff41);
+      border: 1px solid rgba(0, 255, 65, .22);
+    }
+
+    .ns-badge.warn {
+      background: rgba(255, 165, 0, .1);
+      color: #ffa500;
+      border: 1px solid rgba(255, 165, 0, .22);
+    }
+
+    .ns-badge.err {
+      background: rgba(255, 7, 58, .1);
+      color: #ff073a;
+      border: 1px solid rgba(255, 7, 58, .22);
+    }
+
+    .ns-badge-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: ns-blink 1.5s ease-in-out infinite;
+    }
+
+    .ns-meta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: rgba(0, 255, 65, .4);
+      margin-top: 7px;
+    }
+
+    .ns-meta span {
+      color: var(--accent, #00ff41);
+    }
+
+    .ns-meta span.c {
+      color: #00e5ff;
+    }
+
+    /* ── Graph ── */
+    .ns-graph-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .ns-graph-meta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      color: rgba(0, 255, 65, .4);
+      text-align: right;
+      line-height: 1.7;
+    }
+
+    .ns-graph-meta span.g {
+      color: var(--accent, #00ff41);
+    }
+
+    .ns-graph-meta span.c {
+      color: #00e5ff;
+    }
+
+    .ns-graph-area {
+      position: relative;
+      height: 88px;
+      display: flex;
+      align-items: flex-end;
+      gap: 3px;
+      overflow: hidden;
+    }
+
+    .ns-bar {
+      flex: 1;
+      border-radius: 2px 2px 0 0;
+      background: linear-gradient(to top, var(--accent, #00ff41), rgba(0, 229, 255, .6));
+      box-shadow: 0 0 5px rgba(0, 255, 65, .3);
+      animation: ns-bar-grow .8s ease-out both;
+      transition: opacity .3s;
+      min-width: 0;
+    }
+
+    .ns-bar:hover {
+      opacity: .65;
+    }
+
+    @keyframes ns-bar-grow {
+      from {
+        transform: scaleY(0);
+        transform-origin: bottom
+      }
+
+      to {
+        transform: scaleY(1);
+        transform-origin: bottom
+      }
+    }
+
+    .ns-baseline {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(0, 255, 65, .12);
+    }
+
+    .ns-graph-ticks {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px;
+      color: rgba(0, 255, 65, .3);
+      letter-spacing: 1px;
+    }
+
+    /* ── Resource meters ── */
+    .ns-res-grid {
+      display: flex;
+      gap: 24px;
+      margin-top: 12px;
+    }
+
+    .ns-res-item {
+      flex: 1;
+    }
+
+    .ns-res-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: rgba(0, 255, 65, .4);
+      margin-bottom: 7px;
+      text-transform: uppercase;
+    }
+
+    .ns-res-track {
+      height: 4px;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .ns-res-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 1.2s ease;
+    }
+
+    .ns-res-fill.g {
+      background: linear-gradient(90deg, var(--accent, #00ff41), #00e5ff);
+      box-shadow: 0 0 8px rgba(0, 255, 65, .45);
+    }
+
+    .ns-res-fill.a {
+      background: linear-gradient(90deg, #ffa500, #ff073a);
+      box-shadow: 0 0 8px rgba(255, 165, 0, .4);
+    }
+
+    .ns-res-fill.c {
+      background: #00e5ff;
+      box-shadow: 0 0 8px rgba(0, 229, 255, .4);
+    }
+
+    .ns-res-bg-g {
+      background: rgba(0, 255, 65, .1);
+    }
+
+    .ns-res-bg-a {
+      background: rgba(255, 165, 0, .1);
+    }
+
+    .ns-res-bg-c {
+      background: rgba(0, 229, 255, .1);
+    }
+
+    /* ── Node list ── */
+    .ns-node-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-top: 12px;
+    }
+
+    .ns-node-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+    }
+
+    .ns-node-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .ns-node-dot.on {
+      background: var(--accent, #00ff41);
+      box-shadow: 0 0 7px var(--accent, #00ff41);
+      animation: ns-blink 2s ease-in-out infinite;
+    }
+
+    .ns-node-dot.sb {
+      background: #00e5ff;
+      box-shadow: 0 0 7px #00e5ff;
+    }
+
+    .ns-node-dot.of {
+      background: #ff073a;
+      box-shadow: 0 0 7px #ff073a;
+    }
+
+    .ns-node-name {
+      flex: 1;
+      color: rgba(224, 255, 232, .65);
+    }
+
+    .ns-node-name.of-text {
+      color: rgba(255, 7, 58, .5);
+    }
+
+    .ns-node-ping {
+      color: var(--accent, #00ff41);
+      margin-left: auto;
+      padding-right: 10px;
+    }
+
+    .ns-node-ping.sb {
+      color: #00e5ff;
+    }
+
+    .ns-node-ping.of {
+      color: #ff073a;
+    }
+
+    .ns-node-bwrap {
+      width: 72px;
+      height: 3px;
+      background: rgba(0, 255, 65, .1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .ns-node-bfill {
+      height: 100%;
+      border-radius: 2px;
+    }
+
+    .ns-node-bfill.g {
+      background: var(--accent, #00ff41);
+    }
+
+    .ns-node-bfill.c {
+      background: #00e5ff;
+    }
+
+    .ns-node-bfill.r {
+      background: #ff073a;
+    }
+
+    /* ── Activity Log ── */
+    .ns-log-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 12px;
+      max-height: 155px;
+      overflow: hidden;
+    }
+
+    .ns-log-item {
+      display: flex;
+      gap: 10px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10.5px;
+      line-height: 1.4;
+      padding: 5px 10px;
+      background: rgba(0, 255, 65, .03);
+      border-left: 2px solid;
+      border-radius: 0 2px 2px 0;
+      animation: ns-slide-in .4s ease-out both;
+    }
+
+    @keyframes ns-slide-in {
+      from {
+        opacity: 0;
+        transform: translateX(-8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0)
+      }
+    }
+
+    .ns-log-item.ok {
+      border-color: var(--accent, #00ff41);
+    }
+
+    .ns-log-item.info {
+      border-color: #00e5ff;
+    }
+
+    .ns-log-item.warn {
+      border-color: #ffa500;
+    }
+
+    .ns-log-item.err {
+      border-color: #ff073a;
+    }
+
+    .ns-log-time {
+      color: rgba(0, 255, 65, .35);
+      white-space: nowrap;
+    }
+
+    .ns-log-type {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .ns-log-item.ok .ns-log-type {
+      color: var(--accent, #00ff41);
+    }
+
+    .ns-log-item.info .ns-log-type {
+      color: #00e5ff;
+    }
+
+    .ns-log-item.warn .ns-log-type {
+      color: #ffa500;
+    }
+
+    .ns-log-item.err .ns-log-type {
+      color: #ff073a;
+    }
+
+    .ns-log-msg {
+      color: rgba(224, 255, 232, .55);
+    }
+
+    /* ── Ticker ── */
+    .ns-ticker {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 20px;
+      background: rgba(0, 255, 65, .04);
+      border: 1px solid rgba(0, 255, 65, .15);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .ns-ticker-lbl {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--accent, #00ff41);
+      text-transform: uppercase;
+      white-space: nowrap;
+      border-right: 1px solid rgba(0, 255, 65, .18);
+      padding-right: 16px;
+    }
+
+    .ns-ticker-track {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ns-ticker-inner {
+      display: flex;
+      gap: 56px;
+      white-space: nowrap;
+      animation: ns-ticker 28s linear infinite;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: rgba(0, 255, 65, .65);
+    }
+
+    @keyframes ns-ticker {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(-50%)
+      }
+    }
+
+    .ns-t-key {
+      color: rgba(0, 255, 65, .35);
+    }
+
+    .ns-t-sep {
+      color: rgba(0, 255, 65, .18);
+    }
+
+    .ns-t-val {
+      color: var(--accent, #00ff41);
+      font-weight: 700;
+    }
+
+    .ns-t-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width:900px) {
+      .ns-grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .ns-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .ns-grid-2b {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width:540px) {
+      #network-status {
+        padding: 60px 18px;
+      }
+
+      .ns-grid-4 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .ns-cval {
+        font-size: 1.5rem;
+      }
+
+      .ns-cval.sm {
+        font-size: 1.2rem;
+      }
+
+      .ns-title {
+        font-size: 1.8rem;
+      }
+
+      .ns-res-grid {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NOTIFICATION CONTAINER -->
+  <div id="notif-container"></div>
+  <!-- NOTIFICATION SETTINGS PANEL -->
+  <div id="notif-panel" class="notif-panel hidden">
+    <div class="notif-panel-header">
+      <span>⚙️ Pengaturan Notifikasi</span>
+      <button onclick="toggleNotifPanel()">✕</button>
+    </div>
+    <div class="notif-panel-body">
+      <label class="toggle-row">
+        <span>Notifikasi Anggota Baru</span>
+        <input type="checkbox" id="notif-member" checked onchange="saveNotifSettings()">
+        <span class="slider"></span>
+      </label>
+      <label class="toggle-row">
+        <span>Notifikasi Postingan Baru</span>
+        <input type="checkbox" id="notif-post" checked onchange="saveNotifSettings()">
+        <span class="slider"></span>
+      </label>
+      <label class="toggle-row">
+        <span>Notifikasi Event</span>
+        <input type="checkbox" id="notif-event" checked onchange="saveNotifSettings()">
+        <span class="slider"></span>
+      </label>
+      <label class="toggle-row">
+        <span>Notifikasi Pesan Chat</span>
+        <input type="checkbox" id="notif-chat" checked onchange="saveNotifSettings()">
+        <span class="slider"></span>
+      </label>
+      <div class="notif-sound-row">
+        <span>Suara Notifikasi</span>
+        <select id="notif-sound" onchange="saveNotifSettings()">
+          <option value="beep">Beep</option>
+          <option value="chime">Chime</option>
+          <option value="silent">Silent</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <!-- NAVBAR -->
+  <nav id="navbar">
+    <div class="nav-logo">
+      <div class="logo-icon">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <polygon points="18,2 34,10 34,26 18,34 2,26 2,10" stroke="var(--accent)" stroke-width="2" fill="none" />
+          <text x="18" y="22" text-anchor="middle" fill="var(--accent)" font-family="Orbitron" font-size="10"
+            font-weight="700">H</text>
+        </svg>
+      </div>
+      <span class="logo-text">HECKER.<span class="accent">INT</span></span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#home" onclick="scrollTo('home')">Beranda</a></li>
+      <li><a href="#about" onclick="scrollTo('about')">Tentang</a></li>
+      <li><a href="#features" onclick="scrollTo('features')">Fitur</a></li>
+      <li><a href="#members" onclick="scrollTo('members')">Anggota</a></li>
+      <li><a href="#chat" onclick="scrollTo('chat')">Chat</a></li>
+      <li><a href="#network-status" onclick="scrollTo('network-status')">Status</a></li>
+      <li><a href="#join" onclick="scrollTo('join')">Bergabung</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="notif-btn" onclick="toggleNotifPanel()" title="Pengaturan Notifikasi">
+        <span class="notif-bell">🔔</span>
+        <span id="notif-badge" class="notif-badge">3</span>
+      </button>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Ganti Tema">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <a href="https://www.facebook.com/INIAKUNABAIDEH.TQ" target="_blank" class="btn-nav">Buka di FB</a>
+    </div>
+  </nav>
+  <!-- HERO SECTION -->
+  <section id="home" class="hero">
+    <div class="hero-bg">
+      <canvas id="matrix-canvas"></canvas>
+      <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge animate-in delay-1">
+        <span class="pulse-dot"></span> KOMUNITAS AKTIF • 66.200+ ANGGOTA
+      </div>
+      <h1 class="hero-title animate-in delay-2">
+        <span class="title-line">HENGKER</span>
+        <span class="title-line accent-glow">INTERNASIONAL</span>
+      </h1>
+      <p class="hero-sub animate-in delay-3">
+        Forum edukasi cyber security terbesar di Indonesia. Belajar, berbagi, dan berkembang bersama komunitas hacker
+        etis terpercaya.
+      </p>
+      <div class="hero-stats animate-in delay-4">
+        <div class="stat-box">
+          <span class="stat-num" data-target="66200">0</span>
+          <span class="stat-label">Anggota</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" data-target="1127">0</span>
+          <span class="stat-label">Postingan/Bulan</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" data-target="120">0</span>
+          <span class="stat-label">Tutorial</span>
+        </div>
+      </div>
+      <div class="hero-cta animate-in delay-5">
+        <a href="#join" target="_blank" class="btn-primary">
+          <span>Gabung Sekarang</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M3 8h10M9 4l4 4-4 4" />
+          </svg>
+        </a>
+        <button class="btn-secondary" onclick="scrollTo('about')">Pelajari Lebih</button>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+  <!-- ABOUT SECTION -->
+  <section id="about" class="section about-section">
+    <div class="section-label">// TENTANG KAMI</div>
+    <div class="about-grid">
+      <div class="about-visual">
+        <div class="cyber-mask">
+          <svg viewBox="0 0 200 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="100,10 190,55 190,165 100,210 10,165 10,55" stroke="var(--accent)" stroke-width="2"
+              fill="var(--card-bg)" />
+            <text x="100" y="120" text-anchor="middle" fill="var(--accent)" font-family="Orbitron" font-size="48"
+              font-weight="900">H</text>
+            <circle cx="100" cy="110" r="60" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 8" fill="none"
+              opacity="0.5" />
+            <circle cx="100" cy="110" r="80" stroke="var(--accent2)" stroke-width="1" stroke-dasharray="2 12"
+              fill="none" opacity="0.3" />
+          </svg>
+          <div class="rotating-ring"></div>
+        </div>
+        <div class="about-tags">
+          <span class="tag">Ethical Hacking</span>
+          <span class="tag">CTF</span>
+          <span class="tag">Penetration Testing</span>
+          <span class="tag">OSINT</span>
+          <span class="tag">Bug Bounty</span>
+          <span class="tag">Forensik Digital</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <h2>Forum Hacker Etis <span class="accent">Terbesar</span> di Indonesia</h2>
+        <p> <small><s>(group - FB/WA/DLL)</s></small> HECKER INTERNASIONAL bukanlah sekadar grup biasa. Kami adalah
+          ekosistem terbuka bagi siapa saja yang ingin belajar tentang etika keamanan siber, pemrograman, hingga tren
+          teknologi terbaru secara gratis dan kolaboratif.</p>
+        <p>Didirikan pada tahun 2018 di platform Facebook, grup ini telah berkembang menjadi wadah diskusi yang sehat
+          dan edukatif bagi puluhan ribu talenta muda di seluruh penjuru dunia.</p>
+        <div class="about-values">
+          <div class="value-item">
+            <span class="value-icon">🛡️</span>
+            <div>
+              <strong>Etis & Bertanggung Jawab</strong>
+              <p>Semua aktivitas dalam batas hukum dan etika profesi</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="value-icon">📚</span>
+            <div>
+              <strong>Edukatif & Terbuka</strong>
+              <p>Berbagi ilmu untuk semua level, dari pemula hingga ahli</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <span class="value-icon">🌐</span>
+            <div>
+              <strong>Komunitas Global</strong>
+              <p>Terhubung dengan praktisi keamanan siber dari seluruh dunia</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div>
+  </section>
+  <!-- HAT TYPES SECTION -->
+  <section id="hat-types" class="section hat-types-section">
+    <div class="section-label">// TIPE HACKER</div>
+    <h2 class="section-title">Memahami <span class="accent">Black Hat, Gray Hat, & White Hat</span></h2>
+    <p class="section-subtitle">
+      Tiga kategori utama dalam dunia hacker berdasarkan niat dan etika
+    </p>
+
+    <div class="hat-grid">
+      <!-- Black Hat -->
+      <div class="hat-card black-hat" data-hat="black">
+        <div class="hat-glow"></div>
+        <div class="hat-header">
+          <div class="hat-icon">🥷</div>
+          <div class="hat-label">TIPE 01</div>
+        </div>
+        <h3 class="hat-title">BLACK <span class="hat-accent">HAT</span></h3>
+        <p class="hat-desc">
+          Hacker yang bertindak dengan niat jahat, mengeksploitasi kelemahan untuk keuntungan pribadi, merusak sistem,
+          atau mencuri data secara illegal.
+        </p>
+        <ul class="hat-traits">
+          <li><span class="trait-dot bad"></span> Motivasi: Keuntungan finansial, pemberontakan</li>
+          <li><span class="trait-dot bad"></span> Tujuan: Merusak, mencuri, membahayakan</li>
+          <li><span class="trait-dot bad"></span> Metode: Eksploitasi tanpa izin, malware</li>
+          <li><span class="trait-dot bad"></span> Status: <strong>ILLEGAL</strong></li>
+        </ul>
+        <div class="hat-badge danger">MELANGGAR HUKUM</div>
+      </div>
+
+      <!-- Gray Hat -->
+      <div class="hat-card gray-hat" data-hat="gray">
+        <div class="hat-glow"></div>
+        <div class="hat-header">
+          <div class="hat-icon">🦹</div>
+          <div class="hat-label">TIPE 02</div>
+        </div>
+        <h3 class="hat-title">GRAY <span class="hat-accent">HAT</span></h3>
+        <p class="hat-desc">
+          Hacker yang beroperasi di area abu-abu. Bisa melakukan peretasan tanpa izin tetapi dengan niat baik, lalu
+          melaporkan kerentanan setelahnya.
+        </p>
+        <ul class="hat-traits">
+          <li><span class="trait-dot warn"></span> Motivasi: Menunjukkan skill,antics</li>
+          <li><span class="trait-dot warn"></span> Tujuan: Mencari tahu, bukan merusak</li>
+          <li><span class="trait-dot warn"></span> Metode: Hack tanpa izin, tapi reveal after</li>
+          <li><span class="trait-dot warn"></span> Status: <strong>ZONA ABU-ABU</strong></li>
+        </ul>
+        <div class="hat-badge warning">BERISIKO & DEBATABLE</div>
+      </div>
+
+      <!-- White Hat -->
+      <div class="hat-card white-hat" data-hat="white">
+        <div class="hat-glow"></div>
+        <div class="hat-header">
+          <div class="hat-icon">🛡️</div>
+          <div class="hat-label">TIPE 03</div>
+        </div>
+        <h3 class="hat-title">WHITE <span class="hat-accent">HAT</span></h3>
+        <p class="hat-desc">
+          Hacker etis yang bekerja secara legal dengan izin, membantu organisasi menemukan dan memperbaiki kerentanan
+          sebelum dimanfaatkan oleh pihak jahat.
+        </p>
+        <ul class="hat-traits">
+          <li><span class="trait-dot safe"></span> Motivasi: Mengamankan sistem, melindungi</li>
+          <li><span class="trait-dot safe"></span> Tujuan: Membantu, mencegah serangan</li>
+          <li><span class="trait-dot safe"></span> Metode: Penetration testing, bug bounty</li>
+          <li><span class="trait-dot safe"></span> Status: <strong>LEGAL & ETIS</strong></li>
+        </ul>
+        <div class="hat-badge success">PRAKTISI KEAMANAN</div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FEATURES SECTION -->
+  <section id="features" class="section features-section">
+    <div class="section-label">// FITUR KOMUNITAS</div>
+    <h2 class="section-title">Apa yang Bisa Kamu <span class="accent">Dapatkan?</span></h2>
+    <div class="features-grid">
+      <div class="feature-card" data-delay="0">
+        <div class="feature-icon">🔐</div>
+        <h3>CTF & Tantangan</h3>
+        <p>Ikuti Capture The Flag reguler, asah skill hacking etismu dalam environment yang aman dan legal.</p>
+        <div class="feature-tag">POPULER</div>
+      </div>
+      <div class="feature-card" data-delay="1">
+        <div class="feature-icon">📡</div>
+        <h3>Tutorial Eksklusif</h3>
+        <p>120+ tutorial video dan artikel tentang pentesting, OSINT, malware analysis, dan lainnya.</p>
+      </div>
+      <div class="feature-card" data-delay="2">
+        <div class="feature-icon">💼</div>
+        <h3>Peluang Karier</h3>
+        <p>Lowongan kerja, bug bounty programs, dan koneksi dengan perusahaan cyber security terkemuka.</p>
+      </div>
+      <div class="feature-card" data-delay="3">
+        <div class="feature-icon">🤝</div>
+        <h3>Mentoring</h3>
+        <p>Program mentoring dari senior security researcher untuk anggota yang ingin berkembang cepat.</p>
+      </div>
+      <div class="feature-card" data-delay="4">
+        <div class="feature-icon">🧪</div>
+        <h3>Hacking Lab / Sandbox</h3>
+        <p>Latihan langsung di environment virtual yang aman — uji exploit, malware, dan teknik pentesting tanpa risiko.
+        </p>
+        <div class="feature-tag live-tag">BETA</div>
+      </div>
+      <div class="feature-card" data-delay="5">
+        <div class="feature-icon">💬</div>
+        <h3>Forum Diskusi</h3>
+        <p>Diskusi aktif 24/7 tentang vulnerability, tools, teknik terbaru, dan isu keamanan global.</p>
+      </div>
+    </div>
+  </section>
+  <!-- MEMBERS SECTION -->
+  <section id="members" class="section members-section">
+    <div class="section-label">// ANGGOTA AKTIF</div>
+    <h2 class="section-title">Bergabung dengan <span class="accent">66.200+</span> Member</h2>
+    <div class="members-ticker">
+      <div class="ticker-track" id="ticker">
+        <!-- JS filled -->
+      </div>
+    </div>
+    <div class="members-cta">
+      <p>Sudah <strong>66.200+</strong> anggota mempercayai komunitas ini sebagai tempat belajar cyber security mereka.
+      </p>
+      <div class="member-levels">
+        <div class="level-badge newbie">🟢 Newbie</div>
+        <div class="level-badge intermediate">🔵 Intermediate</div>
+        <div class="level-badge advanced">🟡 Advanced</div>
+        <div class="level-badge expert">🔴 Expert</div>
+        <div class="level-badge elite">⚪ Elite</div>
+      </div>
+    </div>
+  </section>
+  <!-- CHAT SECTION -->
+  <section id="chat" class="section chat-section">
+    <div class="section-label">// LIVE CHAT & AI ASSISTANT</div>
+    <h2 class="section-title">Chat Anggota & <span class="accent">AI Asisten</span></h2>
+    <div class="chat-layout">
+      <!-- Community Chat -->
+      <div class="chat-box community-chat">
+        <div class="chat-header">
+          <div class="chat-title">
+            <span class="online-dot"></span>
+            <span>Chat Komunitas</span>
+          </div>
+          <span class="online-count" id="online-count">247 online</span>
+        </div>
+        <div class="chat-messages" id="community-messages">
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="comm-input" placeholder="Tulis pesan ke komunitas..."
+            onkeydown="if(event.key==='Enter') sendCommunityMsg()">
+          <button onclick="sendCommunityMsg()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- AI Chatbot -->
+      <div class="chat-box ai-chat">
+        <div class="chat-header">
+          <div class="chat-title">
+            <div class="ai-avatar">AI</div>
+            <div>
+              <span>HeckerBot</span>
+              <span class="ai-status">NLP • Powered by AI</span>
+            </div>
+          </div>
+          <button class="clear-btn" onclick="clearAIChat()">Bersihkan</button>
+        </div>
+        <div class="chat-messages" id="ai-messages">
+          <div class="msg ai-msg">
+            <div class="msg-bubble">
+              Halo! Aku <strong>HeckerBot</strong> 🤖, asisten AI HECKER INTERNASIONAL. Aku bisa menjawab pertanyaanmu
+              tentang cyber security, CTF, tools hacking, dan komunitas kita. Tanyakan apa saja!
+            </div>
+            <span class="msg-time">Sekarang</span>
+          </div>
+        </div>
+        <div class="ai-suggestions" id="ai-suggestions">
+          <button onclick="askBot('Apa itu CTF?')">Apa itu CTF?</button>
+          <button onclick="askBot('Tools hacking terbaik untuk pemula?')">Tools pemula?</button>
+          <button onclick="askBot('Cara bergabung dengan komunitas ini?')">Cara gabung?</button>
+          <button onclick="askBot('Apa itu SQL Injection?')">SQL Injection?</button>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" id="ai-input" placeholder="Tanya HeckerBot apa saja..."
+            onkeydown="if(event.key==='Enter') askBotFromInput()">
+          <button onclick="askBotFromInput()" id="send-ai-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13" />
+              <polygon points="22 2 15 22 11 13 2 9 22 2" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+     NETWORK STATUS SECTION
+     ═══════════════════════════════════════════════════ -->
+  <section id="network-status" class="section">
+
+    <!-- Decorative orbs -->
+    <div class="ns-orb ns-orb-1"></div>
+    <div class="ns-orb ns-orb-2"></div>
+
+    <div class="ns-wrap">
+
+      <!-- Header -->
+      <div class="ns-live-label">
+        <span class="ns-live-dot"></span>
+        LIVE SYSTEM INTEGRITY
+      </div>
+      <h2 class="ns-title">STATUS <span class="accent">JARINGAN</span></h2>
+      <p class="ns-subtitle">
+        Real-time network telemetry &mdash; <em>All nodes monitored 24/7</em>
+      </p>
+
+      <!-- Uptime bar -->
+      <div class="ns-uptime-bar">
+        <span class="ns-uptime-label">System Uptime</span>
+        <div class="ns-uptime-track">
+          <div class="ns-uptime-fill"></div>
+        </div>
+        <span class="ns-uptime-val">99.97%</span>
+      </div>
+
+      <!-- Row 1: 2 big cards -->
+      <div class="ns-grid-2">
+
+        <!-- Firewall -->
+        <div class="ns-card">
+          <div class="ns-card-glow"></div>
+          <div class="ns-clabel">Security Firewall</div>
+          <div class="ns-cval g">ACTIVE</div>
+          <div class="ns-meta">Ancaman diblokir hari ini: <span id="ns-threats">0</span></div>
+          <div class="ns-badge ok"><span class="ns-badge-dot"></span> DDoS SHIELD ONLINE</div>
+        </div>
+
+        <!-- DB Sync -->
+        <div class="ns-card">
+          <div class="ns-card-glow"></div>
+          <div class="ns-clabel">Database Sync</div>
+          <div class="ns-cval c">OPTIMIZED</div>
+          <div class="ns-meta">Latency: <span class="c">1.2ms</span> &nbsp;|&nbsp; Query/s: <span class="c"
+              id="ns-qps">0</span></div>
+          <div class="ns-badge ok"><span class="ns-badge-dot"></span> REPLIKASI TERSINKRON</div>
+        </div>
+      </div>
+
+      <!-- Row 2: 4 mini cards -->
+      <div class="ns-grid-4">
+
+        <div class="ns-card">
+          <div class="ns-card-glow"></div>
+          <div class="ns-clabel">Main Server</div>
+          <div class="ns-cval w sm">Jakarta-01</div>
+          <div class="ns-badge ok" style="margin-top:10px"><span class="ns-badge-dot"></span> PRIMARY</div>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card-glow"></div>
+          <div class="ns-clabel">Global Traffic</div>
+          <div class="ns-cval a sm"><span id="ns-traffic">840</span> GB/s</div>
+          <div class="ns-meta" style="margin-top:6px">↑ 12% dari kemarin</div>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card-glow"></div>
+          <div class="ns-clabel">Koneksi Aktif</div>
+          <div class="ns-cval c sm"><span id="ns-conn">0</span></div>
+          <div class="ns-meta" style="margin-top:6px">Sesi bersamaan</div>
+        </div>
+
+        <div class="ns-card">
+          <div class="ns-card-glow"></div>
+          <div class="ns-clabel">Packet Loss</div>
+          <div class="ns-cval g sm">0.03%</div>
+          <div class="ns-badge ok" style="margin-top:10px"><span class="ns-badge-dot"></span> NEGLIGIBLE</div>
+        </div>
+      </div>
+
+      <!-- Row 3: Graph + Nodes -->
+      <div class="ns-grid-4b">
+        <div class="ns-card ns-card-wide">
+          <div class="ns-card-glow"></div>
+          <div class="ns-clabel">System Activity Log</div>
+
+          <div class="ns-log-list" id="ns-log">
+            <div class="ns-log-item ok" style="animation-delay:.0s">
+              <span class="ns-log-time">08:01:02</span>
+              <span class="ns-log-type">[OK]</span>
+              <span class="ns-log-msg">Firewall rules updated — 847 rules active</span>
+            </div>
+
+            <div class="ns-log-item info" style="animation-delay:.1s">
+              <span class="ns-log-time">08:00:58</span>
+              <span class="ns-log-type">[INFO]</span>
+              <span class="ns-log-msg">CDN cache refreshed — 12 regions synced</span>
+            </div>
+
+            <div class="ns-log-item warn" style="animation-delay:.2s">
+              <span class="ns-log-time">07:59:44</span>
+              <span class="ns-log-type">[WARN]</span>
+              <span class="ns-log-msg">London-06 maintenance window started</span>
+            </div>
+
+            <div class="ns-log-item ok" style="animation-delay:.3s">
+              <span class="ns-log-time">07:58:11</span>
+              <span class="ns-log-type">[OK]</span>
+              <span class="ns-log-msg">SSL certificates auto-renewed (all domains)</span>
+            </div>
+
+            <div class="ns-log-item info" style="animation-delay:.4s">
+              <span class="ns-log-time">07:55:30</span>
+              <span class="ns-log-type">[INFO]</span>
+              <span class="ns-log-msg">Backup selesai — 2.4TB diarsipkan</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /ns-wrap -->
+
+      <div class="ns-ticker">
+        <div class="ns-ticker-lbl">▶ LIVE FEED</div>
+        <div class="ns-ticker-track">
+          <div class="ns-ticker-inner">
+            <span class="ns-t-item"><span class="ns-t-key">FIREWALL</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">ACTIVE</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">SSL CERT</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">VALID 89 HARI</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">BANDWIDTH</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">840 GB/s</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">ANCAMAN DIBLOKIR</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">1.247</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">UPTIME</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">99.97%</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">LATENCY AVG</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">1.2ms</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">NODES ONLINE</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">7/8</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">INSIDEN TERAKHIR</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">14 HARI LALU</span></span>
+            <!-- duplicate for seamless loop -->
+            <span class="ns-t-item"><span class="ns-t-key">FIREWALL</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">ACTIVE</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">SSL CERT</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">VALID 89 HARI</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">BANDWIDTH</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">840 GB/s</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">ANCAMAN DIBLOKIR</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">1.247</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">UPTIME</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">99.97%</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">LATENCY AVG</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">1.2ms</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">NODES ONLINE</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">7/8</span></span>
+            <span class="ns-t-item"><span class="ns-t-key">INSIDEN TERAKHIR</span><span class="ns-t-sep">→</span><span
+                class="ns-t-val">14 HARI LALU</span></span>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!-- END NETWORK STATUS SECTION -->
+
+  <!-- JOIN SECTION -->
+  <section id="join" class="section join-section">
+    <div class="join-bg"></div>
+    <div class="join-content">
+      <div class="section-label">// BERGABUNG</div>
+      <h2>Siap Menjadi Bagian dari <span class="accent">HECKER INTERNASIONAL?</span></h2>
+      <p>Bergabunglah dengan komunitas cyber security terbesar dan paling aktif di Indonesia. Gratis, terbuka, dan penuh
+        ilmu!</p>
+      <div class="join-steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-text">
+            <strong>Klik Tombol di Bawah</strong>
+            <span>Diarahkan ke grup Facebook kami</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-text">
+            <strong>Klik "Bergabung"</strong>
+            <span>Di halaman grup Facebook</span>
+          </div>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-text">
+            <strong>Mulai Belajar!</strong>
+            <span>Eksplorasi ribuan konten edukasi</span>
+          </div>
+        </div>
+      </div>
+      <a href="https://facebook.com/groups/208337657534538" target="_blank" class="btn-primary btn-large">
+        Gabung Grup Facebook
+        <span class="btn-glow"></span>
+      </a>
+      <p class="join-note">✓ Gratis &nbsp;✓ Komunitas Positif &nbsp;✓ 66.200+ Anggota Aktif</p>
+
+      <div class="join-steps" style="margin-top:40px">
+          <a href="https://www.instagram.com/m.iqbaaal_3/" target="_blank" class="btn-secondary btn-small">
+        Visit On Instagram
+        <span class="btn-glow"></span>
+      </a>
+      </div>
+    </div>
+    
+  </section>
+ 
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo-text">HECKER.<span class="accent">INT</span></div>
+        <p>Komunitas cyber security terbesar dan paling aktif di Indonesia. Belajar, berbagi, dan berkembang bersama.
+        </p>
+        <div class="social-links">
+          <a href="https://facebook.com/groups/208337657534538" target="_blank">Facebook</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Navigasi</h4>
+        <ul>
+          <li><a href="#home">Beranda</a></li>
+          <li><a href="#about">Tentang</a></li>
+          <li><a href="#features">Fitur</a></li>
+          <li><a href="#members">Anggota</a></li>
+          <li><a href="#chat">Chat</a></li>
+          <li><a href="#network-status">Status Jaringan</a></li>
+          <li><a href="#join">Bergabung</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Komunitas</h4>
+        <ul>
+          <li><a href="#">Aturan Komunitas</a></li>
+          <li><a href="#">CTF Events</a></li>
+          <li><a href="#">Tutorial</a></li>
+          <li><a href="#">Bug Bounty</a></li>
+        </ul>
+      </div>
+      <div class="footer-stats">
+        <h4>Status Komunitas</h4>
+        <div class="status-item"><span class="dot green"></span> Server Online</div>
+        <div class="status-item"><span class="dot green"></span> Chat Aktif</div>
+        <div class="status-item"><span class="dot yellow"></span> CTF Coming Soon</div>
+        <div class="member-counter">
+          <span id="footer-count">66,200</span>
+          <span>Anggota & Bertambah</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 HECKER INTERNASIONAL. Komunitas Edukasi Cyber Security.</span>
+      <span>Admin: Moch-Iqbaal</span>
+    </div>
+  </footer>
+  <!-- FLOATING CHAT BUTTON -->
+  <button class="fab-chat" onclick="scrollTo('chat')" title="Buka Chat">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+    <span class="fab-badge" id="fab-badge">!</span>
+  </button>
+  <script src="app.js"></script>
+
+  <!-- ═══════════════════════════════════════════
+     NETWORK STATUS — Inline JS
+     (Kalau app.js kamu udah ada, pindahin ini ke sana)
+     ═══════════════════════════════════════════ -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* counter animation */
+      function countUp(el, target, ms) {
+        if (!el) return;
+        const t0 = performance.now();
+        (function tick(now) {
+          const p = Math.min((now - t0) / ms, 1);
+          const ease = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(ease * target).toLocaleString('id-ID');
+          if (p < 1) requestAnimationFrame(tick);
+        })(t0);
+      }
+
+      /* build graph bars */
+      function buildGraph() {
+        const g = document.getElementById('ns-graph');
+        if (!g) return;
+        const h = [55, 42, 70, 60, 80, 65, 90, 72, 88, 60, 74, 85, 78, 95, 70, 88, 82, 91, 76, 85, 88, 93, 80, 87];
+        const bl = g.querySelector('.ns-baseline');
+        h.forEach((v, i) => {
+          const b = document.createElement('div');
+          b.className = 'ns-bar';
+          b.style.cssText = `height:${v}%;animation-delay:${i * 0.04}s`;
+          g.insertBefore(b, bl);
+        });
+      }
+
+      /* resource ticker */
+      const cpuQ = [18, 23, 31, 27, 19, 25, 22, 30, 26, 21];
+      const ramQ = [58, 61, 64, 60, 63, 66, 61, 59, 62, 64];
+      let ri = 0;
+      function tickRes() {
+        const cpu = cpuQ[ri % cpuQ.length];
+        const ram = ramQ[ri % ramQ.length];
+        ri++;
+        const ce = document.getElementById('ns-cpu');
+        const re = document.getElementById('ns-ram');
+        const cb = document.getElementById('ns-cpu-bar');
+        const rb = document.getElementById('ns-ram-bar');
+        if (ce) ce.textContent = cpu + '%';
+        if (re) re.textContent = ram + '%';
+        if (cb) cb.style.width = cpu + '%';
+        if (rb) rb.style.width = ram + '%';
+      }
+
+      /* live log injection */
+      const logs = [
+        { t: 'ok', m: 'Percobaan intrusi diblokir — IP banned (47.89.x.x)' },
+        { t: 'info', m: 'CDN edge node heartbeat — Singapore OK' },
+        { t: 'ok', m: 'Database vacuum selesai — +12% performa' },
+        { t: 'warn', m: 'Penggunaan memori tinggi di Jakarta-01' },
+        { t: 'info', m: 'Member baru terdaftar — token diterbitkan' },
+        { t: 'ok', m: 'SSL handshake terverifikasi — Tokyo-03' },
+        { t: 'info', m: 'Auto-scale aktif — 2 worker ditambahkan' },
+        { t: 'warn', m: 'Rate limit threshold 85% — monitoring' },
+      ];
+      const typeLabel = { ok: '[OK]', info: '[INFO]', warn: '[WARN]', err: '[ERR]' };
+      let li = 0;
+      function injectLog() {
+        const c = document.getElementById('ns-log');
+        if (!c) return;
+        const now = new Date().toTimeString().slice(0, 8);
+        const m = logs[li % logs.length]; li++;
+        const el = document.createElement('div');
+        el.className = 'ns-log-item ' + m.t;
+        el.innerHTML = `<span class="ns-log-time">${now}</span><span class="ns-log-type">${typeLabel[m.t]}</span><span class="ns-log-msg">${m.m}</span>`;
+        c.insertBefore(el, c.firstChild);
+        if (c.children.length > 6) c.removeChild(c.lastChild);
+      }
+
+      /* init */
+      function init() {
+        buildGraph();
+        tickRes();
+        setInterval(tickRes, 3200);
+        setInterval(injectLog, 4000);
+        countUp(document.getElementById('ns-threats'), 1247, 2000);
+        countUp(document.getElementById('ns-qps'), 8324, 2000);
+        countUp(document.getElementById('ns-conn'), 3841, 2000);
+        countUp(document.getElementById('ns-traffic'), 840, 1500);
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+      else init();
+    })();
+  </script>
+</body>
+
+</html>
